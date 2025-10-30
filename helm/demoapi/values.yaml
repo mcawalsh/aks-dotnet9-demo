@@ -24,6 +24,13 @@ autoscaling:
   maxReplicas: 5
   targetCPUUtilizationPercentage: 50
 
+startupProbe:
+  httpGet:
+    path: /
+    port: 8080
+  failureThreshold: 30
+  periodSeconds: 10
+
 livenessProbe:
   httpGet:
     path: /
