@@ -131,11 +131,11 @@ az aks create `
 
 #### Explanation of key parameters:
 - ```--node-count 1``` Starts the cluster with a single node (VM).
-- ```enable-addons monitoring``` Installs the Azure Monitor / Log Analytics agenet for container metrics and logs.
+- ```enable-addons monitoring``` Installs the Azure Monitor / Log Analytics agent for container metrics and logs.
 - ```--workspace-resource-id $LAW_ID``` Links the AKS cluster directly to the previously created Log Analytics workspace, so telemetry flows automatically.
-- ```attach-acr $ACR``` Grans the clsuter permission to pull images from the ACR created earlier without requiring credentials.
+- ```attach-acr $ACR``` Grants the clsuter permission to pull images from the ACR created earlier without requiring credentials.
 - ```generate-ssh-keys``` Creates a local SSH key pair (if none exists) used for admin access to the cluster nodes -- primarily for debugging or node-level maintenance.
-- ```enable-manage-identity``` Assigns Azure Managed Identity to the AKS cluster, allowing it to authenticate securely to other Azure services without storing secrets.
+- ```enable-managed-identity``` Assigns Azure Managed Identity to the AKS cluster, allowing it to authenticate securely to other Azure services without storing secrets.
 
 Next, get the kubeconfig details and merge them in your local config file. This causes your local ```kubectl``` commands to be automatically authenticated to the AKS cluster.
 
@@ -179,7 +179,7 @@ Forward local port ```8080``` to the ```demoapi`` service running inside AKS:
 kubectl port-forward svc/demoapi 8080:8080
 ```
 
-Then, in a separate terminal, verify the API is responsing:
+Then, in a separate terminal, verify the API is responding:
 
 ```bash
 curl http://localhost:8080
@@ -193,7 +193,7 @@ A successful response (```200 OK```) confirms that:
 
 ### 7. Horizontal Pod Autoscaling (HPA)
 
-The **Horizonal Pod Autoscaler (HPA)** automatically scales the number of pods in a deployment based on observed CPU or memory usage.
+The **Horizontal Pod Autoscaler (HPA)** automatically scales the number of pods in a deployment based on observed CPU or memory usage.
 
 The targets for these are defined in ```helm/demoapi/values.yaml```.
 
@@ -212,7 +212,7 @@ You should see something similar to:
 | demoapi  | Deployment/demoapi  | cpu: 5%/50% | 1        | 5        | 1         | 2m   |
 
 
-### 8. Simulate Load to Triffer Scaling
+### 8. Simulate Load to Trigger Scaling
 
 To verify that autoscaling works, we'll generate synthetic load against the API using a lightweight **busybox** pod inside the cluster.
 
