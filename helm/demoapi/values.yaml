@@ -44,3 +44,6 @@ readinessProbe:
     port: 8080
   initialDelaySeconds: 5
   periodSeconds: 5
+
+appInsights:
+  connectionString: "InstrumentationKey=<your-app-insights-key>"

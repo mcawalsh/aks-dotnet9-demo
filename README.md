@@ -55,12 +55,12 @@ Where appropriate a ```.ps1``` script has been provided with complete, idempoten
 Define key variables to make the following commands reusable and consistent:
 
 ```bash
-RG=rg-aks-demo
-LOC=westeurope
-AKS=aks-demo
-ACR=acrdemouk
-APPINSIGHTS=ai-aks-demo
-LAW=law-aks-demo
+$RG="rg-aks-demo"
+$LOC="westeurope"
+$AKS="aks-demo"
+$ACR="acrdemouk"
+$APPINSIGHTS="ai-aks-demo"
+$LAW="law-aks-demo"
 ```
 
 ### 2. Resource Group & Telemetry
@@ -103,6 +103,8 @@ az monitor app-insights component create \
 ### 3. ACR & AKS
 
 Next, we're need an **Azure Container Registry (ACR)** to store our docker images.
+
+Make sure you have your Docker daemon running when running the following file.
 
 [create-acr-azure-container-registry.ps1](create-acr-azure-container-registry.ps1)
 
@@ -159,7 +161,7 @@ docker push $IMAGE_TAG
 From the helm folder, deploy (or upgrade) the API:
 
 ```bash
-helm upgrade --install demoapi ./helm/demoapi --namespace default
+helm upgrade --install demoapi ./demoapi --namespace default
 ```
 
 This command installs the Helm chart if it doesn't exist, or upgrades it if it does - ensuring idempotent deployments.
@@ -231,6 +233,8 @@ kubectl get hpa -w
 
 After a while, you should see the ```TARGETS``` percentage increase and the ```REPLICAS``` count scale up (e.g. from 1 -> 3).
 
+![Horizontal Pod Autoscaler in action — CPU usage exceeded the 50% threshold, scaling the demoapi deployment from 1 to 4 replicas automatically.](images/hpa-scaling-demoapi.png)
+
 Once testing is complete, clean up the load generator:
 
 ```bash
@@ -255,6 +259,8 @@ requests
 | order by count_ desc
 ```
 
+![Application Insights showing recent requests received by the API via KQL — summarized by response code and operation.](images/app-insights-requests-summary.png)
+
 **View average request duration:**
 
 ```kql
@@ -262,6 +268,7 @@ requests
 | summarize avg(duration) by bin(timestamp, 5m)
 ```
 
+![Average API request duration visualized over time using KQL in Azure Monitor.](images/app-insights-average-duration.png)
 
 ### 10. Teardown / Cleanup
 
